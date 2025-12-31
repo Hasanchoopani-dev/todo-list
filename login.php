@@ -1,7 +1,12 @@
 <?php 
 include("./includs/init.php");  
 include("./includs/login-process.php");
-
+if(isset($_GET["action"]) && $_GET["action"] == "logout" ){
+    user_logout();
+}
+if( is_login() ) {
+    redirect("index.php") ;
+}
 ?>
 <!DOCTYPE html>     
 <html lang="fa">
@@ -28,11 +33,11 @@ include("./includs/login-process.php");
             <h1>ورود به سایت</h1>
             <div class="form-group">
                 <label for="username">نام کاربری</label>
-                <input required type="text" id="username" name="username" class="form-control">
+                <input  type="text" id="username" name="username" class="form-control" required >
             </div>
             <div class="form-group">
                 <label for="password">گذرواژه</label>
-                <input required type="text" id="password" name="password" class="form-control">
+                <input  type="password" id="password" name="password" class="form-control" required >
             </div>
             <div class="switch-group">
                 <input type="checkbox" name="remember" id="remember">

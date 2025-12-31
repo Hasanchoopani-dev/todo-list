@@ -10,6 +10,7 @@ if(isset($_POST["login"])){
     if($user){
         //login
         $_SESSION["user"] = $user;
+        redirect("index.php" );
     }else{
         $error = "نام کاربری یا گذرواژه اشتباه است";
     }
