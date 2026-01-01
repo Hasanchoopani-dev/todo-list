@@ -6,7 +6,6 @@ if(isset($_GET['delete_task'])){
     delete_task($_GET['delete_task']);
 }
 $tasks = get_user_tasks();
-$tasks = sort_tasks($tasks);
 ?>
     <main>
         <section class="widget">

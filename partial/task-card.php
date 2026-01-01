@@ -4,7 +4,7 @@
         <div class="progress-bar"><div style="width: <?php echo $task["progress"] ?>%;"></div></div>
     </div>
     <div class="task-title">
-        <a href="new.php">
+        <a href="new.php?edit=<?php echo $task["uid"]; ?> ">
             <svg xmlns="http://www.w3.org/2000/svg" width="19.5" height="21.337" viewBox="0 0 19.5 21.337">
                 <g id="edit-2" transform="translate(-2.25 -1.413)">
                     <path id="Path_56" data-name="Path 56" d="M5.536,19.51a2.288,2.288,0,0,1-1.586-.6,2.385,2.385,0,0,1-.686-2.031l.37-3.242,0-.014A3.78,3.78,0,0,1,4.5,11.776l8.212-8.692a4.758,4.758,0,0,1,2.8-1.647A4.415,4.415,0,0,1,19.073,2.9a4.411,4.411,0,0,1,1.67,3.47,4.753,4.753,0,0,1-1.49,2.892l-1.339,1.419a.75.75,0,0,1-1.091-1.029l1.34-1.42a3.369,3.369,0,0,0,1.084-1.966,2.99,2.99,0,0,0-1.2-2.274c-1.811-1.7-3-1.184-4.24.121L5.595,12.8a2.345,2.345,0,0,0-.471,1.008l-.369,3.232a.9.9,0,0,0,.224.771.883.883,0,0,0,.774.175l3.218-.55a2.17,2.17,0,0,0,.965-.517l.009-.01,3.95-4.18a.75.75,0,1,1,1.09,1.03l-3.946,4.176a3.627,3.627,0,0,1-1.808.977h0l-3.22.55A2.763,2.763,0,0,1,5.536,19.51Z" fill="#0071ff"/>
@@ -35,7 +35,7 @@
                 <?php echo get_task_label($task['status']); ?>
             </div>
         </div>
-        <a href="?delete_task=<?php echo $task['uid'];?>" class="task-delete" onclick="return confirm('sure??');">
+        <a href="tasklist.php?delete_task=<?php echo $task['uid'];?>" class="task-delete" onclick="return confirm('sure??');">
             <svg xmlns="http://www.w3.org/2000/svg" width="19.5" height="21.5" viewBox="0 0 19.5 21.5">
                 <g id="trash" transform="translate(-2.25 -1.25)">
                     <path id="Path_42" data-name="Path 42" d="M3,6.73a.75.75,0,0,1-.072-1.5l2.04-.2a60.086,60.086,0,0,1,6.013-.3c3.325,0,6.722.169,10.094.5a.75.75,0,1,1-.148,1.493c-3.323-.329-6.67-.5-9.946-.5a58.594,58.594,0,0,0-5.865.3l-2.042.2C3.048,6.729,3.024,6.73,3,6.73Z" fill="#ff003d"/>

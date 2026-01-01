@@ -1,24 +1,72 @@
 <?php $page_name = "tasklist";?>
 <?php include("./partial/header.php") ?><!--header -->
 <?php
+$success    = "";
+$error      = '';
+
+$title      = '';
+$status     = 'queue';
+$progress   = 0;
+$date       = date( 'Y-m-d  H:i:s ');
+
+$is_edit    = false;
+
+if(isset($_GET["edit"])){
+    $edit_uid   = $_GET["edit"];
+    $is_edit    = true;
+    $task       = get_task($edit_uid);
+    if($task){
+        $title      = $task["title"];
+        $status     = $task["status"];
+        $progress   = $task["progress"];
+        $date       = $task["date"];
+    }
+}
+
 if(isset($_POST["save_task"])){
     $title      = $_POST["title"];
     $status     = $_POST["status"];
     $progress   = $_POST["progress"];
     $date       = $_POST["date"];
-    $uid        = insert_task($title, $status, $progress, $date);
-    redirect("tasklist.php");   
+
+    if(strlen($title) < 3){
+        $error = "نام کار باید وارد شود";
+    }
+
+    if( ! $error ) {
+
+        if( $is_edit ) {
+            edit_task($edit_uid,$title, $status, $progress, $date);
+            $success = "ویرایش انجام شد";
+        } else {
+            $uid = insert_task($title, $status, $progress, $date);
+            redirect("tasklist.php");
+        }
+    }
+
 }
+
 ?>
 <?php include("./partial/sidebar.php") ?><!--.sidebar-->
     <main>
-        <h1>ثبت کار جدید</h1>
+        <h1>
+            <?php if( $is_edit ) : ?>
+                ویرایش <<<?php echo $title ;?> >>
+            <?php else :?>
+                ثبت کار جدید
+            <?php endif; ?>
+
+        </h1>
+        <?php if($error) : ?>
         <div class="message error">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="m14 16.16-3.96-3.96M13.96 12.24 10 16.2M10 6h4c2 0 2-1 2-2 0-2-1-2-2-2h-4C9 2 8 2 8 4s1 2 2 2Z" stroke="#FF8A65" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 4.02c3.33.18 5 1.41 5 5.98v6c0 4-1 6-6 6H9c-5 0-6-2-6-6v-6c0-4.56 1.67-5.8 5-5.98" stroke="#FF8A65" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path></svg>
             <p>
-                 خطا در ثبت یا ویرایش کار
+                <?php echo $error ;?>
             </p>
         </div><!--.message-->
+        <?php endif;?>
+
+        <?php if($success) : ?>
         <div class="message success">
             <svg xmlns="http://www.w3.org/2000/svg" width="19.5" height="21.5" viewBox="0 0 19.5 21.5">
                 <g id="clipboard-tick" transform="translate(-2.25 -1.25)">
@@ -29,54 +77,56 @@ if(isset($_POST["save_task"])){
                 </g>
             </svg>
             <p>
-                ویرایش با موفقیت انجام شد
+               <?php echo $success ?>
             </p>
         </div><!--.message-->
+
+        <?php endif;?>
         <form action="" class="row" method="post" >
             <div class="col col-12">
                 <div class="form-group">
                     <label for="title">نام کار</label>
-                    <input type="text" class="form-control" id="title" name="title">
+                    <input type="text" class="form-control" id="title" name="title" value="<?php echo $title; ?>">
                 </div>
             </div>
             <div class="col col-4">
                 <div class="form-group">
                     <label for="status">وضعیت</label>
                     <select name="status" id="status" class="form-control">
-                        <option value="queue">در صف انجام</option>
-                        <option value="doing">در حال انجام</option>
-                        <option value="done">انجام شده</option>
-                        <option value="expire">منقضی شده</option>
+                        <option value="queue"  <?php echo $status == "queue"  ? "selected" : "" ?> >در صف انجام</option>
+                        <option value="doing"  <?php echo $status == "doing"  ? "selected" : "" ?> >در حال انجام</option>
+                        <option value="done"   <?php echo $status == "done"   ? "selected" : "" ?> >انجام شده</option>
+                        <option value="expire" <?php echo $status == "expire" ? "selected" : "" ?>  >منقضی شده</option>
                     </select>
                 </div>
             </div>
             <div class="col col-4">
                 <div class="form-group">
                     <label for="progress">درصد پیشرفت</label>
-                    <input type="number" min="0" max="100" step="1" class="form-control" id="progress" name="progress" value="0">
+                    <input type="number" min="0" max="100" step="1" class="form-control" id="progress" name="progress" value="<?php echo $progress; ?>">
                 </div>
             </div>
             <div class="col col-4">
                 <div class="form-group">
                     <label for="date">مهلت زمانی</label>
-                    <input type="text" min="0" max="100" step="1" class="form-control date-field" id="date" name="date">
+                    <input type="text" min="0" max="100" step="1" class="form-control date-field" id="date" name="date" <?php echo $date ; ?>>
                 </div>
             </div>
             <div class="col col-12">
-                <button class="btn btn-primary" name="save_task">
+                <button class="btn btn-primary" name= "save_task">
                     ذخیره کار
                 </button>
             </div>
         </form>
 
-        <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <script>
             flatpickr(".date-field", {
                 enableTime  : true,
                 dateFormat  : "Y-m-d H:i:s",
             });
-        </script>-->
+        </script>
 
     </main>
 <?php include("./partial/footer.php") ?>

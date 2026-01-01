@@ -27,12 +27,26 @@ function delete_task($uid){
 
     save_user_tasks($tasks);
 }
+function edit_task($uid,$title,$status, $progress,$date){
+    $tasks = get_user_tasks();
+    foreach($tasks as $task_index => $task){
+        if( $task["uid"] == $uid ){
+            $tasks[$task_index]['title']    = $title;
+            $tasks[$task_index]['status']   = $status;
+            $tasks[$task_index]['progress'] = $progress;
+            $tasks[$task_index]['date']     = $date;
+        }
+    }
+    save_user_tasks($tasks);
+}
+
+
 function save_user_tasks($tasks){
 
     //save tasks
     file_put_contents(get_user_file(), serialize($tasks));
 }
-function get_user_tasks(){
+function get_user_tasks($limit =false){
 
     //get user tasks
      $tasks  = [];
@@ -40,6 +54,13 @@ function get_user_tasks(){
         $data       = file_get_contents(get_user_file());
         $tasks      =unserialize($data);
     }
+    $tasks          = sort_tasks($tasks);
+
+    if( $limit  ){
+        return array_slice($tasks ,0,3);
+    }
+
+
     return $tasks;
 }
 function get_user_file(){
@@ -74,15 +95,28 @@ function sort_tasks($tasks){
     } );
     return $tasks;
 }
+function get_task($uid){
+    $tasks = get_user_tasks();
+    foreach($tasks as $task){
+        if($task['uid']==$uid){
+            return $task;
+        }
+    }
+    return false;
+}
 
+function get_task_stats(){
+    $tasks = get_user_tasks();
+    $stats = [
+        "queue"     => 0,
+        "doing"     => 0,
+        "done"      => 0,
+        "expire"    => 0,
+    ];
+    foreach($tasks as $task){
+         $status = $task['status'];
+         $stats[$status]++;
 
-
-
-
-
-
-
-
-
-
-
+    }
+    return $stats;
+}
