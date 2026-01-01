@@ -1,11 +1,22 @@
+<?php $page_name = "tasklist";?>
 <?php include("./partial/header.php") ?><!--header -->
+<?php
+if(isset($_POST["save_task"])){
+    $title      = $_POST["title"];
+    $status     = $_POST["status"];
+    $progress   = $_POST["progress"];
+    $date       = $_POST["date"];
+    $uid        = insert_task($title, $status, $progress, $date);
+    redirect("tasklist.php");   
+}
+?>
 <?php include("./partial/sidebar.php") ?><!--.sidebar-->
     <main>
         <h1>ثبت کار جدید</h1>
         <div class="message error">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="m14 16.16-3.96-3.96M13.96 12.24 10 16.2M10 6h4c2 0 2-1 2-2 0-2-1-2-2-2h-4C9 2 8 2 8 4s1 2 2 2Z" stroke="#FF8A65" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 4.02c3.33.18 5 1.41 5 5.98v6c0 4-1 6-6 6H9c-5 0-6-2-6-6v-6c0-4.56 1.67-5.8 5-5.98" stroke="#FF8A65" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path></svg>
             <p>
-                خطا در ثبت یا ویرایش کار
+                 خطا در ثبت یا ویرایش کار
             </p>
         </div><!--.message-->
         <div class="message success">
@@ -21,7 +32,7 @@
                 ویرایش با موفقیت انجام شد
             </p>
         </div><!--.message-->
-        <form action="" class="row">
+        <form action="" class="row" method="post" >
             <div class="col col-12">
                 <div class="form-group">
                     <label for="title">نام کار</label>
@@ -52,7 +63,7 @@
                 </div>
             </div>
             <div class="col col-12">
-                <button class="btn btn-primary">
+                <button class="btn btn-primary" name="save_task">
                     ذخیره کار
                 </button>
             </div>

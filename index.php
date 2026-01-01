@@ -1,4 +1,7 @@
- <?php include("./partial/header.php") ?> <!--header -->
+<?php
+$page_name="dashboard";
+?>
+<?php include("./partial/header.php") ?> <!--header -->
 <?php include("./partial/sidebar.php") ?><!--.sidebar-->
         <main>
             <h1>پیشخوان</h1>

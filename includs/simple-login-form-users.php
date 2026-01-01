@@ -5,7 +5,7 @@ return [
         'password'  => '09155643563',
         'name'      => 'حسن چوپانی',
         'phone'     => '09123456789',
-        'avatar'    => 'images/avatar-01.jpg',
+        'avatar'    => 'images/DSC_3097.JPG',
     ],
     [
         'username'  => 'rezarazavi',
