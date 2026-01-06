@@ -1,43 +1,52 @@
 <?php
 function insert_task($title,$status, $progress,$date){
-
-    $tasks    = get_user_tasks();
-
     //Add new task to user tasks
-    $uid      =generate_random_string(10);
-    $tasks[]  = [
-        "uid"           => $uid,
-        'create_time'   => time(),
-        'title'         => $title,
-        'status'        => $status,
-        'progress'      => $progress,
-        'date'          => $date
+    $created_at=date("Y-m-d H:i:s");
+    $task  = [
+    'user_id'       => get_current_user_id(),
+    'title'         => db_escape($title),
+    'content'       => '',
+    'status'        => db_escape($status),
+    'precent'       => abs(intval($progress)),
+    'due_date'      => db_escape($date),
+    'createde_at'   => $created_at,
+    'updated_at'    => $created_at,
     ];
-    save_user_tasks($tasks);
-    return $uid;
+    return db_insert('tasks', $task);
 }
-function delete_task($uid){
-    $tasks = get_user_tasks();
-    $tasks = array_filter($tasks,function($task) use ($uid) {
-        if($task['uid'] == $uid){
-            return false;
-        }
-        return true;
-    });
+function delete_task($task_id){
+  $task_id = abs(intval($task_id));
+  $delete_sql = "DELETE FROM tasks WHERE ID = $task_id";
+  return db_query($delete_sql);
+  if($result ){
+    return db_affected_rows();
+  }
+  return false;
+}
 
-    save_user_tasks($tasks);
-}
-function edit_task($uid,$title,$status, $progress,$date){
-    $tasks = get_user_tasks();
-    foreach($tasks as $task_index => $task){
-        if( $task["uid"] == $uid ){
-            $tasks[$task_index]['title']    = $title;
-            $tasks[$task_index]['status']   = $status;
-            $tasks[$task_index]['progress'] = $progress;
-            $tasks[$task_index]['date']     = $date;
-        }
+
+function get_task($task_id){
+    $task_id = abs(intval($task_id));
+    $sql     ="SELECT * FROM tasks WHERE ID = $task_id";
+    $result  =db_query($sql);
+    if($result && $result->num_rows){
+        return mysqli_fetch_assoc($result);
     }
-    save_user_tasks($tasks);
+    return false;
+}
+
+
+function edit_task($task_id,$title,$status, $progress,$date){
+    $task_id    = abs(intval($task_id));
+    $progress   = abs(intval($progress));
+    $title      = db_escape($title);
+    $status     = db_escape($status);
+    $date       = db_escape($date);
+    $update_sql = "UPDATE tasks SET
+                title   = '$title' , status = '$status' , precent = $progress , due_date = '$date'
+                WHERE  ID = $task_id ";
+
+    return db_query($update_sql);
 }
 
 
@@ -46,26 +55,34 @@ function save_user_tasks($tasks){
     //save tasks
     file_put_contents(get_user_file(), serialize($tasks));
 }
+
+
 function get_user_tasks($limit =false){
 
     //get user tasks
-     $tasks  = [];
-    if(file_exists(get_user_file())){
-        $data       = file_get_contents(get_user_file());
-        $tasks      =unserialize($data);
+    $user_id    =   get_current_user_id();
+    $sql        = "SELECT * FROM tasks WHERE user_id = $user_id";
+    if($limit){
+        // $limit = (int) $limit;
+        $sql .= " LIMIT $limit" ;
     }
-    $tasks          = sort_tasks($tasks);
+    $result = db_query($sql);
+    if( $result && $result->num_rows ) {
 
-    if( $limit  ){
-        return array_slice($tasks ,0,3);
+        return mysqli_fetch_all($result , MYSQLI_ASSOC);
     }
+    return false;
 
-
-    return $tasks;
 }
+
+
+
+
+
+
 function get_user_file(){
         // get user tasks file
-    $user       = get_user();
+    $user       = current_user();
     $user_file  = 'tasks/task-'.$user["username"].'.txt';
     return $user_file;
 }
@@ -74,7 +91,7 @@ function get_task_label($status){
         'queue'     => 'در صف',
         'doing'     => 'در حال انجام',
         'done'      => "انجام شده",
-        'expire'   => "منقضی شده",
+        'expire'    => "منقضی شده",
     ];
     return $statuses[$status];
 }
@@ -95,27 +112,28 @@ function sort_tasks($tasks){
     } );
     return $tasks;
 }
-function get_task($uid){
-    $tasks = get_user_tasks();
-    foreach($tasks as $task){
-        if($task['uid']==$uid){
-            return $task;
-        }
-    }
-    return false;
-}
+
 
 function get_task_stats(){
-    $tasks = get_user_tasks();
-    $stats = [
+        $stats = [
         "queue"     => 0,
         "doing"     => 0,
         "done"      => 0,
         "expire"    => 0,
     ];
+
+    $user_id    = get_current_user_id();
+    $sql        = "SELECT status ,COUNT(*) as total FROM `tasks` WHERE user_id = $user_id GROUP BY status ";
+    $result     = db_query($sql);
+    if(!$result || !$result->num_rows){
+        return $stats;
+    }
+    $tasks = mysqli_fetch_all($result,MYSQLI_ASSOC);
+
+
     foreach($tasks as $task){
-         $status = $task['status'];
-         $stats[$status]++;
+         $status  = $task['status'];
+         $stats[$status]= $task['total'];
 
     }
     return $stats;

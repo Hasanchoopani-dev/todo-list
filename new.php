@@ -12,14 +12,14 @@ $date       = date( 'Y-m-d  H:i:s ');
 $is_edit    = false;
 
 if(isset($_GET["edit"])){
-    $edit_uid   = $_GET["edit"];
+    $task_id   = $_GET["edit"];
     $is_edit    = true;
-    $task       = get_task($edit_uid);
+    $task       = get_task($task_id);
     if($task){
         $title      = $task["title"];
         $status     = $task["status"];
-        $progress   = $task["progress"];
-        $date       = $task["date"];
+        $progress   = $task["precent"];
+        $date       = $task["due_date"];
     }
 }
 
@@ -36,11 +36,17 @@ if(isset($_POST["save_task"])){
     if( ! $error ) {
 
         if( $is_edit ) {
-            edit_task($edit_uid,$title, $status, $progress, $date);
+            edit_task($task_id,$title, $status, $progress, $date);
             $success = "ویرایش انجام شد";
         } else {
-            $uid = insert_task($title, $status, $progress, $date);
-            redirect("tasklist.php");
+            $task_id = insert_task($title, $status, $progress, $date);
+
+            if( $task_id ) {
+                redirect("tasklist.php");
+
+            }else {
+                $error = "خطا در ثبت کار";
+            }
         }
     }
 

@@ -9,7 +9,7 @@ if(isset($_POST["login"])){
     $user       = user_login($username , $password );
     if($user){
         //login
-        $_SESSION["user"] = $user['ID'];
+        $_SESSION["user"] = $user['ID'  ];
         redirect("index.php" );
     }else{
         $error = "نام کاربری یا گذرواژه اشتباه است";

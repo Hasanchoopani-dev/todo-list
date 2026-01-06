@@ -1,8 +1,5 @@
 <?php
-$user = get_current_user();
-
-
-
+$user = current_user();
 ?>
 <aside class="sidebar">
     <a href="https://azarmehrpardazesh.com/" class="panel-logo align-center">

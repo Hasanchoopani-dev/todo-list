@@ -3,6 +3,13 @@ function db(){
     global $db;
     return $db;
 };
+
+function db_affected_rows(){
+    return mysqli_affected_rows(db());
+}
+
+
+
 function db_log($error){
     file_put_contents(
         "db-error.txt",
@@ -35,3 +42,27 @@ function db_insert($table,$data){
     }
     return mysqli_insert_id(db());
 }
+
+function db_query($sql){
+    $result = @mysqli_query(db(),$sql);
+    if($result){
+        return $result;
+    }
+
+    db_log(mysqli_error(db()));
+
+    return false;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
