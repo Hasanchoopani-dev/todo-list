@@ -1,5 +1,9 @@
 <?php
+include("./includs/config.php");
 session_start();
+date_default_timezone_set(SITE_TIMEZONE);
+include("./includs/function-databas.php");
+include("./includs/db.php");
 include("./includs/function.php");
 include("includs/functions-user.php");
 include("./includs/functions-task.php");

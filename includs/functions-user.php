@@ -1,12 +1,16 @@
 <?php
 function user_login($username , $password ){
-    $users = include("simple-login-form-users.php");
-    foreach($users as $user){
-        if($user["username"] == $username  &&  $user["password"] == $password){
-            //log 
-            return $user;
+    $username = db_escape($username);
+    $password = db_escape($password);
+    $login_sql = "SELECT * FROM users WHERE username = '$username' AND  password ='$password';";
+    $result = @mysqli_query(db(), $login_sql);
+    if ($result){
+        if($result -> num_rows){
+            return mysqli_fetch_assoc($result);
         }
-    } 
+    }else{
+        db_log(mysqli_error(db()));
+    }
     return false;
 }
 function user_logout(){
@@ -17,7 +21,19 @@ function user_logout(){
 }
 function is_login(){
     return isset($_SESSION['user']);
-}   
-function get_user(){
-    return $_SESSION['user'];
+}
+function get_user($user_id){
+    $user_id    = intval($user_id);
+    $sql        = " SELECT * FROM users WHERE ID = $user_id";
+    $result = @mysqli_query(db(),$sql);
+    if($result){
+        if($result -> num_rows){
+            return mysqli_fetch_assoc($result);
+        }
+    }
+    return false;
+}
+function get_current_user(){
+    $user_id = $_SESSION['user'];
+    return get_user($user_id );
 }

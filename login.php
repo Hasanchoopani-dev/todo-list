@@ -1,14 +1,14 @@
-<?php 
-include("./includs/init.php");  
+<?php
+include("./includs/init.php");
 include("./includs/login-process.php");
 if(isset($_GET["action"]) && $_GET["action"] == "logout" ){
     user_logout();
 }
 if( is_login() ) {
-    redirect("index.php") ;
+    redirect("index.php");
 }
 ?>
-<!DOCTYPE html>     
+<!DOCTYPE html>
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
@@ -20,7 +20,7 @@ if( is_login() ) {
     <div class="login-container">
         <a href="https://azarmehrpardazesh.com/">
             <img src="images/logo.png" class="login-logo" alt="آذرمهر پردازش" width="100" height="100">
-        </a> 
+        </a>
         <?php if($error): ?>
             <div class="message error">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="m14 16.16-3.96-3.96M13.96 12.24 10 16.2M10 6h4c2 0 2-1 2-2 0-2-1-2-2-2h-4C9 2 8 2 8 4s1 2 2 2Z" stroke="#FF8A65" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 4.02c3.33.18 5 1.41 5 5.98v6c0 4-1 6-6 6H9c-5 0-6-2-6-6v-6c0-4.56 1.67-5.8 5-5.98" stroke="#FF8A65" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path></svg>
@@ -46,6 +46,13 @@ if( is_login() ) {
                 </label>
             </div>
             <button name="login" class="btn btn-primary">ورود به حساب کاربری</button>
+            <br>
+            <button type="button" class="btn btn-primary"
+            onclick="location.href='register.php'">
+             ثبت نام
+            </button>
+
+
         </form>
     </div><!--.login-container-->
     <a class="about-course" href="https://azarmehrpardazesh.com/">

@@ -1,0 +1,9 @@
+2026-01-05 11:56:59=>2002
+2026-01-05 11:58:37=>2002
+2026-01-05 15:28:52=>2002
+2026-01-05 15:28:54=>2002
+2026-01-05 15:29:54=>2002
+2026-01-05 15:34:58=>php_network_getaddresses: getaddrinfo for locahost failed: No such host is known.
+2026-01-05 15:35:43=>Unknown database 'todo-list'
+2026-01-05 15:35:45=>Unknown database 'todo-list'
+2026-01-05 15:41:37=>Access denied for user 'root'@'localhost' (using password: YES)
