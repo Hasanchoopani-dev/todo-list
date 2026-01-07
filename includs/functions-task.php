@@ -16,7 +16,8 @@ function insert_task($title,$status, $progress,$date){
 }
 function delete_task($task_id){
   $task_id = abs(intval($task_id));
-  $delete_sql = "DELETE FROM tasks WHERE ID = $task_id";
+  $current_user_where ='AND user_id =' . get_current_user_id();
+  $delete_sql = "DELETE FROM tasks WHERE ID = $task_id $current_user_where";
   return db_query($delete_sql);
   if($result ){
     return db_affected_rows();
@@ -27,7 +28,8 @@ function delete_task($task_id){
 
 function get_task($task_id){
     $task_id = abs(intval($task_id));
-    $sql     ="SELECT * FROM tasks WHERE ID = $task_id";
+    $current_user_where ='AND user_id =' . get_current_user_id();
+    $sql     ="SELECT * FROM tasks WHERE ID = $task_id $current_user_where";
     $result  =db_query($sql);
     if($result && $result->num_rows){
         return mysqli_fetch_assoc($result);
@@ -38,32 +40,37 @@ function get_task($task_id){
 
 function edit_task($task_id,$title,$status, $progress,$date){
     $task_id    = abs(intval($task_id));
-    $progress   = abs(intval($progress));
+    $progress = abs(intval($progress));
     $title      = db_escape($title);
     $status     = db_escape($status);
     $date       = db_escape($date);
-    $update_sql = "UPDATE tasks SET
-                title   = '$title' , status = '$status' , precent = $progress , due_date = '$date'
-                WHERE  ID = $task_id ";
 
-    return db_query($update_sql);
+    return db_update(
+        'tasks',
+        [
+                        'title'=> $title,
+                        'status'=> $status,
+                        'precent'=> $progress,
+                        'due_date'=>$date,
+                     ],
+         [
+                        'ID'=>(int)$task_id,
+                        'user_id'=> get_current_user_id(),
+                     ]
+
+    );
 }
 
 
-function save_user_tasks($tasks){
-
-    //save tasks
-    file_put_contents(get_user_file(), serialize($tasks));
-}
 
 
 function get_user_tasks($limit =false){
 
     //get user tasks
-    $user_id    =   get_current_user_id();
+    $user_id    =  (int)get_current_user_id();
     $sql        = "SELECT * FROM tasks WHERE user_id = $user_id";
-    if($limit){
-        // $limit = (int) $limit;
+    if($limit!==false){
+        $limit = (int) $limit;
         $sql .= " LIMIT $limit" ;
     }
     $result = db_query($sql);
@@ -71,7 +78,7 @@ function get_user_tasks($limit =false){
 
         return mysqli_fetch_all($result , MYSQLI_ASSOC);
     }
-    return false;
+    return [];
 
 }
 
@@ -80,12 +87,7 @@ function get_user_tasks($limit =false){
 
 
 
-function get_user_file(){
-        // get user tasks file
-    $user       = current_user();
-    $user_file  = 'tasks/task-'.$user["username"].'.txt';
-    return $user_file;
-}
+
 function get_task_label($status){
     $statuses = [
         'queue'     => 'در صف',
@@ -103,14 +105,6 @@ function get_remain_days($date){
         return $days . "باقی مانده";
     }
     return "";
-}
-function sort_tasks($tasks){
-    usort($tasks , function($a ,$b ){
-       $timeA   = $a['create_time'] ?? 0;
-        $timeB  = $b['create_time'] ?? 0;
-        return $timeB <=> $timeA;
-    } );
-    return $tasks;
 }
 
 

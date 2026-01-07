@@ -3,7 +3,7 @@ $register_error = "" ;
 if (isset($_POST["register"])){
 
     $username   = isset($_POST["username"])     ? db_escape(trim($_POST['username']))    : "" ;
-    $password   = isset($_POST['password'])     ? db_escape($_POST['password'])    : "" ;
+    $password   = isset($_POST['password'])     ? db_escape($_POST['password'])          : "" ;
     $name       = isset($_POST['name'])         ? db_escape(trim($_POST['name']))        : "" ;
     $family     = isset($_POST['family'])       ? db_escape(trim($_POST['family']))      : "" ;
     $phone      = isset($_POST['phone'])        ? db_escape(trim($_POST['phone']))       : "" ;

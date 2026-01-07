@@ -35,3 +35,19 @@
 2026-01-06 21:18:00=>Incorrect datetime value: '' for column 'due_date' at row 1
 2026-01-06 21:18:06=>Incorrect datetime value: '' for column 'due_date' at row 1
 2026-01-06 21:18:36=>Incorrect datetime value: '' for column 'due_date' at row 1
+2026-01-07 16:07:42=>You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'GROUP BY status' at line 1
+2026-01-07 16:07:42=>You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'LIMIT 3' at line 1
+2026-01-07 17:15:22=>You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'GROUP BY status' at line 1
+2026-01-07 17:15:22=>You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'LIMIT 3' at line 1
+2026-01-07 17:33:52=>You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'GROUP BY status' at line 1
+2026-01-07 17:38:34=>Incorrect datetime value: '' for column 'due_date' at row 1
+2026-01-07 17:39:06=>Incorrect datetime value: '' for column 'due_date' at row 1
+2026-01-07 19:45:35=>You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'GROUP BY status' at line 1
+2026-01-07 19:45:51=>You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'GROUP BY status' at line 1
+2026-01-07 20:05:03=>You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'GROUP BY status' at line 1
+2026-01-08 00:40:38=>You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'GROUP BY status' at line 1
+2026-01-08 00:41:44=>You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ID = '7'AND user_id = '7'' at line 1
+2026-01-08 00:42:05=>You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ID = '7'AND user_id = '7'' at line 1
+2026-01-08 00:42:43=>You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ID = '7'AND user_id = '7'' at line 1
+2026-01-08 00:43:07=>You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ID = '7'AND user_id = '7'' at line 1
+2026-01-08 00:44:16=>You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ID = '7'AND user_id = '7'' at line 1

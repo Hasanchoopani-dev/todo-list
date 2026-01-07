@@ -2,7 +2,9 @@
 <?php include("./partial/header.php") ?><!--header -->
 <?php
 $success    = "";
+
 $error      = '';
+
 
 $title      = '';
 $status     = 'queue';
@@ -20,6 +22,8 @@ if(isset($_GET["edit"])){
         $status     = $task["status"];
         $progress   = $task["precent"];
         $date       = $task["due_date"];
+    }else{
+        redirect('tasklist.php');
     }
 }
 
@@ -102,7 +106,7 @@ if(isset($_POST["save_task"])){
                         <option value="queue"  <?php echo $status == "queue"  ? "selected" : "" ?> >در صف انجام</option>
                         <option value="doing"  <?php echo $status == "doing"  ? "selected" : "" ?> >در حال انجام</option>
                         <option value="done"   <?php echo $status == "done"   ? "selected" : "" ?> >انجام شده</option>
-                        <option value="expire" <?php echo $status == "expire" ? "selected" : "" ?>  >منقضی شده</option>
+                        <option value="expire" <?php echo $status === "expire" ? "selected" : "" ?>  >منقضی شده</option>
                     </select>
                 </div>
             </div>

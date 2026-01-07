@@ -21,6 +21,74 @@ function db_escape($string){
     return mysqli_real_escape_string(db(),$string);
 }
 
+function db_update($table , $update_date ,$where_data){
+    $set_sql = '';
+    foreach($update_date as $key => $val){
+        if( $val === NULL){
+            $set_sql .= "$key = NULL, ";
+        }else{
+            $val = db_escape($val);
+            $set_sql .= "$key = '$val' , ";
+        }
+    }
+    $set_sql = trim($set_sql, ', ');
+
+    if(is_array( $where_data)){
+                    $where = '1 = 1';
+    foreach($where_data as $key => $val){
+        if($val === NULL){
+            $where .= "AND $key IS NULL";
+        }else{
+            $where .= " AND $key = '$val'";
+
+        }
+    }
+    }elseif(is_string($where_data)){
+        $where = $where_data;
+    }
+
+
+    $update_sql = "UPDATE $table SET $set_sql WHERE $where";
+
+    $result=@mysqli_query(db(),$update_sql);
+    if(!$result){
+        db_log(mysqli_error(db()));
+        return false;
+    }
+    return mysqli_affected_rows(db());
+
+}
+
+function db_delete($table , $where_data){
+
+    if(is_array( $where_data)){
+                    $where = '1 = 1';
+    foreach($where_data as $key => $val){
+        if($val === NULL){
+            $where .= "AND $key IS NULL";
+        }else{
+            $where .= " AND $key = '$val'";
+
+        }
+    }
+    }elseif(is_string($where_data)){
+        $where = $where_data;
+    }
+
+
+    $update_sql = "DELETE FROM $table WHERE $where";
+
+    $result=@mysqli_query(db(),$update_sql);
+    if(!$result){
+        db_log(mysqli_error(db()));
+        return false;
+    }
+    return mysqli_affected_rows(db());
+
+}
+
+
+
 function db_insert($table,$data){
     $cols  = array_keys($data);
     $cols_sql =implode(', ',$cols);
@@ -34,13 +102,13 @@ function db_insert($table,$data){
         }
     }
     $vals_sql =implode(', ' ,$new_data);
-    $sql = "INSERT INTO $table ($cols_sql) VALUES ($vals_sql)";
-    $result=@mysqli_query(db(),$sql);
-    if(!$result){
-        db_log(mysqli_error(db()));
-        return false;
-    }
-    return mysqli_insert_id(db());
+        $sql = "INSERT INTO $table ($cols_sql) VALUES ($vals_sql)";
+        $result=@mysqli_query(db(),$sql);
+        if(!$result){
+            db_log(mysqli_error(db()));
+            return false;
+        }
+        return mysqli_insert_id(db());
 }
 
 function db_query($sql){

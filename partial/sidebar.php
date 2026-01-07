@@ -6,7 +6,7 @@ $user = current_user();
         <img src="images/logo.png" class="login-logo" alt="azarmehrpardazesh" width="100" height="100">
     </a>
     <div class="profile align-center">
-        <img src="<?php echo $user['photo'] ?$user['photo'] : 'images/DSC_3097.JPG'  ?>" alt="<?php echo $user["name"] ?> " width="256" height="256">
+        <img src="<?php echo $user['photo'] ? $user['photo'] : 'images/DSC_3097.JPG'  ?>" alt="<?php echo $user["name"] ?> " width="256" height="256">
         <p class="user-full-name">
             <?php echo $user["name"] ?>
         </p>
